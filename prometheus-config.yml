@@ -25,7 +25,7 @@ scrape_configs:
   - job_name: 'bring_your_own_interview_springboot_app'
     #actuator(manage) endpoint to collect the data.
     metrics_path: '/manage/prometheus'
-    # how frequently scrap the data from the endpoint
+    # how frequently scrap the data from this endpoint
     scrape_interval: 5s
     # target endpoint. If you are using docker to run your spring boot /manage/prometheus application, localhost will not work, so you can use your machine ip address. My machine ip address is 192.168.0.4.
     # If you are not using docker, then you can use localhost
