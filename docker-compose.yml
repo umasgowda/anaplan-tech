@@ -1,0 +1,44 @@
+version: "3.5"
+
+services:
+
+  mysql-db:
+    image: mysql:5
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: test123
+      MYSQL_DATABASE: definitions
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "mysql -ptest123 -e 'select 1'"]
+      interval: 5s
+      retries: 50
+
+  api:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+      - 443:443
+
+  dashboards:
+    image: usg/dashboards:latest
+    ports:
+      - 8081:8081
+    build:
+       context: ./bring-your-own-interview
+       dockerfile: Dockerfile
+    depends_on:
+       mysql-db:
+         condition: service_healthy
+
+  prometheus:
+    image: 'prom/prometheus:latest'
+    volumes:
+      - ./prometheus-config.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+
