@@ -1,0 +1,10 @@
+*.iml
+.idea
+.vscode
+.bsp
+.project
+.settings
+.classpath
+.DS_Store
+target/
+bin/
