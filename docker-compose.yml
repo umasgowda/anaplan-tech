@@ -26,11 +26,12 @@ services:
 
   dashboards:
     image: usg/dashboards:latest
-    ports:
-      - 8081:8081
     build:
        context: ./bring-your-own-interview
        dockerfile: Dockerfile
+    ports:
+        - 8081:8081
+        - 1000:1000
     depends_on:
        mysql-db:
          condition: service_healthy
