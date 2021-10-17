@@ -25,10 +25,8 @@ services:
       - 443:443
 
   dashboards:
-    image: usg/dashboards:latest
-    build:
-       context: ./bring-your-own-interview
-       dockerfile: Dockerfile
+    image: umashivalingaiah2/dashboards:latest
+    build: ./bring-your-own-interview
     ports:
         - 8081:8081
         - 1000:1000
