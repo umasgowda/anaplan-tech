@@ -151,5 +151,44 @@ http_server_requests_seconds_sum - is the sum of the duration of every request y
 
 http_server_requests_seconds_max - gauge metric which gives us the maximum duration of each type of inbound HTTP request.
 
+#### Grafana
+TODO
+
+#### Alert manager
+TODO
+
+#### Logging - Centralised Logging mechanism
+Centralised Logging management can be done by Splunk or ELK
+
+ELK stands for  
+E - Elastic Search(no sql database) - store the data
+L - LogStash  - process the data
+K - Kibana - visualisation purpose UI Layer helps to view the data
+
+How it works?
+Spring boot application - Generate a log file -> Logstash will the read data from log file and process it -> elastic search store the data -> kibana will pull the logs from elastic search.
+
+Install Elastic Search using homebrew
+https://www.elastic.co/guide/en/elasticsearch/reference/7.15/brew.html
+brew services start elastic/tap/elasticsearch-full
+run -> http://localhost:9200/
+
+Install LogStash https://www.elastic.co/guide/en/logstash/7.15/installing-logstash.html#brew
+brew services start elastic/tap/logstash-full
+
+Install Kibana https://www.elastic.co/guide/en/kibana/7.15/brew.html
+-cd to /usr/local/etc/kibana -> update kibna.yml (uncomment the line elasticsearch.hosts: ["http://localhost:9200"])
+-brew services start elastic/tap/kibana-full
+-http://localhost:5601/app/home
+
+#### Distributed tracing and logging
+
+### CI/CD using Jenkin Pipeline, docker for Spring boot application
+
+
+
+
+
+
 
 
