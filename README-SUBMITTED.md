@@ -25,27 +25,27 @@ Dashboard api service runs on the port 8081. Smoke tests are updated to run agai
 ./smoke_tests.sh
 
 # List all data
-curl 'http://localhost:8081/dashboards' | jq .
+curl 'http://localhost:8081/anaplan/dashboards' | jq .
 
 # Get single record
-curl 'http://localhost/dashboards:8081/2' | jq .
+curl 'http://localhost:8081/anaplan/2/dashboards' | jq .
 
 # Add a new record
-curl --request POST 'http://localhost:8081/dashboards' \
+curl --request POST 'http://localhost:8081/anaplan/dashboards' \
 --header 'content-type: application/json' \
 --data-raw '{
   "title": "New Title"
 }' | jq .
 
 # Update the record
-curl --location --request PUT 'http://localhost:8081/dashboards/6' \
+curl --location --request PUT 'http://localhost:8081/anaplan/6/dashboards' \
 --header 'content-type: application/json' \
 --data-raw '{
   "title": "New Title - updated"
 }' | jq .
 
 # Delete the record
-curl --location --request DELETE 'http://localhost:8081/dashboards/6'
+curl --location --request DELETE 'http://localhost:8081/anaplan/6/dashboards'
 ```
 
 ## REST API's Swagger document

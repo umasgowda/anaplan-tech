@@ -13,14 +13,14 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/dashboards")
+@RequestMapping("/anaplan")
 @Api(value = "dashboards")
 public class DashboardController {
 
     @Autowired
     private DashboardService dashboardService;
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/dashboards", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "List the Dashboards", response = Dashboard.class)
     public ResponseEntity<List<Dashboard>> list() {
         log.info("Dashboard list");
@@ -29,7 +29,7 @@ public class DashboardController {
         return new ResponseEntity<>(dashboards, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}/dashboards", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get Dashboard", response = Dashboard.class)
     public ResponseEntity<Dashboard> get(@PathVariable(name = "id") Integer id) {
         log.info("Dashboard get {}", id);
@@ -41,7 +41,7 @@ public class DashboardController {
         return new ResponseEntity<>(dashboard, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping(value = "/dashboards")
     @ApiOperation(value = "Creates a Dashboard", response = Dashboard.class)
     public ResponseEntity<Dashboard> post(@RequestBody Dashboard dashboard) {
         log.info("Dashboard post {} ", dashboard);
@@ -50,7 +50,7 @@ public class DashboardController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/{id}/dashboards")
     @ApiOperation(value = "Updates Dashboard")
     public ResponseEntity<Dashboard> put(@PathVariable(name = "id") Integer id, @RequestBody Dashboard dashboard) {
         log.info("Dashboard put id {}, dashboard {}", id, dashboard);
@@ -59,7 +59,7 @@ public class DashboardController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/{id}/dashboards")
     @ApiOperation(value = "Deletes Dashboard", response = Dashboard.class)
     public ResponseEntity<String> delete(@PathVariable(name = "id") Integer id) {
         log.info("Dashboard delete id {}", id);
