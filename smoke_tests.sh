@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BODY=$(curl -s http://localhost:8081/dashboards)
+BODY=$(curl -s http://localhost:8081/anaplan/dashboards)
 FAILED_TESTS=0
 
 LENGTH=$(echo "$BODY" | jq length)
