@@ -20,7 +20,7 @@ public class DashboardController {
     @Autowired
     private DashboardService dashboardService;
 
-    @GetMapping(value="/dashboards", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/dashboards", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "List the Dashboards", response = Dashboard.class)
     public ResponseEntity<List<Dashboard>> list() {
         log.info("Dashboard list");
@@ -61,14 +61,16 @@ public class DashboardController {
 
     @DeleteMapping(value = "/{id}/dashboards")
     @ApiOperation(value = "Deletes Dashboard", response = Dashboard.class)
-    public ResponseEntity<String> delete(@PathVariable(name = "id") Integer id) {
+    public ResponseEntity<DashboardResponse> delete(@PathVariable(name = "id") Integer id) {
         log.info("Dashboard delete id {}", id);
         Dashboard dashboard = dashboardService.get(id);
         if (dashboard == null) {
-            return new ResponseEntity<>("Given id does not exist, can't be deleted", HttpStatus.NOT_FOUND);
+            DashboardResponse dashboardResponse = DashboardResponse.builder().message("does not exist, can't be deleted").build();
+            return new ResponseEntity<>(dashboardResponse, HttpStatus.NOT_FOUND);
         } else {
             dashboardService.delete(dashboard);
-            return new ResponseEntity<>("Successfully deleted", HttpStatus.OK);
+            DashboardResponse dashboardResponse = DashboardResponse.builder().message("Successfully deleted").build();
+            return new ResponseEntity<>(dashboardResponse, HttpStatus.OK);
         }
     }
 

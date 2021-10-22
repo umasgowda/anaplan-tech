@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -86,18 +87,20 @@ public class DashboardControllerTest {
     public void deleteReturns200ResponseAndSuccessfullyDeletesWhenDataExist() {
         Dashboard dashboard = Dashboard.builder().id(ID).build();
         when(dashboardService.get(ID)).thenReturn(dashboard);
-        ResponseEntity<String> result = dashboardController.delete(ID);
+        ResponseEntity<DashboardResponse> result = dashboardController.delete(ID);
 
         assertEquals(result.getStatusCode(), HttpStatus.OK);
+        assertEquals(Objects.requireNonNull(result.getBody()).getMessage(), "Successfully deleted");
         verify(dashboardService).delete(dashboard);
     }
 
     @Test
     public void deleteReturnsNotFoundResponseAndDoesNotDeleteAnyRecordWhenDataDoesNotExist() {
         when(dashboardService.get(ID)).thenReturn(null);
-        ResponseEntity<String> result = dashboardController.delete(ID);
+        ResponseEntity<DashboardResponse> result = dashboardController.delete(ID);
 
         assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
+        assertEquals(Objects.requireNonNull(result.getBody()).getMessage(), "does not exist, can't be deleted");
         verify(dashboardService, never()).delete(any(Dashboard.class));
     }
 
