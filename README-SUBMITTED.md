@@ -158,6 +158,7 @@ TODO
 TODO
 
 #### Logging - Centralised Logging mechanism
+TODO
 Centralised Logging management can be done by Splunk or ELK
 
 ELK stands for  
@@ -182,8 +183,10 @@ Install Kibana https://www.elastic.co/guide/en/kibana/7.15/brew.html
 -http://localhost:5601/app/home
 
 #### Distributed tracing and logging
+TODO
 
 ### CI/CD using Jenkin Pipeline, docker for Spring boot application
+TODO
 
 
 
