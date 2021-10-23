@@ -1,17 +1,9 @@
 package com.anaplan.bringyourowninterview.dashboard;
 
 
-import org.springframework.data.repository.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
 
-public interface DashboardRepository extends Repository<Dashboard, Integer> {
+public interface DashboardRepository extends JpaRepository<Dashboard, Integer> {
 
-    <D extends Dashboard> D save(D dashboard);
-
-    Optional<Dashboard> findById(Integer id);
-
-    Iterable<Dashboard> findAll();
-
-    void delete(Dashboard dashboard);
 }
