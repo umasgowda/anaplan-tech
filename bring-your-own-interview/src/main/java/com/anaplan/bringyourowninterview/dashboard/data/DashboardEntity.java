@@ -1,4 +1,4 @@
-package com.anaplan.bringyourowninterview.dashboard;
+package com.anaplan.bringyourowninterview.dashboard.data;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -6,7 +6,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
 
 @Entity(name = "Dashboards")
 @Table(name = "Dashboards")
@@ -16,7 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 @EqualsAndHashCode
-public class Dashboard {
+public class DashboardEntity {
 
     @Id
     @GeneratedValue

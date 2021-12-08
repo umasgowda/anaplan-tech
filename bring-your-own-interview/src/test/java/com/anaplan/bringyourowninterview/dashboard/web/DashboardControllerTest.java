@@ -1,6 +1,9 @@
-package com.anaplan.bringyourowninterview.dashboard;
+package com.anaplan.bringyourowninterview.dashboard.web;
 
 
+import com.anaplan.bringyourowninterview.dashboard.service.DashboardService;
+import com.anaplan.bringyourowninterview.dashboard.web.exception.DashboardNotFoundException;
+import com.anaplan.bringyourowninterview.dashboard.web.model.Dashboard;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,10 +15,9 @@ import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -32,7 +34,7 @@ public class DashboardControllerTest {
     private DashboardController dashboardController;
 
     @Test
-    public void listReturnsSuccessResponseWithDashboards() {
+    public void listReturnsSuccessResponseContainsDashboards() {
 
         List<Dashboard> dashboardList = Lists.list(Dashboard.builder().id(ID).title(TITLE).createdAt(now).updatedAt(now).build());
         when(dashboardService.list()).thenReturn(dashboardList);
@@ -44,24 +46,23 @@ public class DashboardControllerTest {
     }
 
     @Test
-    public void getReturnsSuccessResponseWithDashboardDataWhenDataExistForGivenId() {
+    public void getReturnsSuccessResponseContainsDashboardWhenDashboardExistForGivenId() {
         Dashboard dashboard = Dashboard.builder().id(ID).build();
         when(dashboardService.get(ID)).thenReturn(dashboard);
 
         ResponseEntity<Dashboard> result = dashboardController.get(ID);
 
         assertEquals(result.getStatusCode(), HttpStatus.OK);
-        assertEquals(result.getBody(), dashboard);
+        assertNotNull(result.getBody());
     }
 
-    @Test
+    @Test(expected = DashboardNotFoundException.class)
     public void getReturnsNotFoundResponseWhenDataDoesNotExistForGivenId() {
-        when(dashboardService.get(ID)).thenReturn(null);
+        when(dashboardService.get(ID)).thenThrow(new DashboardNotFoundException());
 
         ResponseEntity<Dashboard> result = dashboardController.get(ID);
 
         assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
-        assertNull(result.getBody());
     }
 
     @Test
@@ -75,7 +76,7 @@ public class DashboardControllerTest {
     }
 
     @Test
-    public void putCallsServiceToUpdateAnEntry() {
+    public void putCallsServiceToUpdateAnEntryWhenDashboardExistForGivenId() {
         Dashboard dashboard = Dashboard.builder().title(TITLE).build();
 
         ResponseEntity<Dashboard> result = dashboardController.put(ID, dashboard);
@@ -83,25 +84,32 @@ public class DashboardControllerTest {
         verify(dashboardService).update(ID, TITLE);
     }
 
-    @Test
-    public void deleteReturns200ResponseAndSuccessfullyDeletesWhenDataExist() {
-        Dashboard dashboard = Dashboard.builder().id(ID).build();
-        when(dashboardService.get(ID)).thenReturn(dashboard);
-        ResponseEntity<DashboardResponse> result = dashboardController.delete(ID);
+    @Test(expected = DashboardNotFoundException.class)
+    public void putCallsServiceToUpdateAnEntryWhenDashboardDoesNotExistForGivenIdThrowsException() {
+        doThrow(new DashboardNotFoundException()).when(dashboardService).update(ID, TITLE);
+        Dashboard dashboard = Dashboard.builder().title(TITLE).build();
 
-        assertEquals(result.getStatusCode(), HttpStatus.OK);
-        assertEquals(Objects.requireNonNull(result.getBody()).getMessage(), "Successfully deleted");
-        verify(dashboardService).delete(dashboard);
+        ResponseEntity<Dashboard> result = dashboardController.put(ID, dashboard);
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
+        verify(dashboardService).update(ID, TITLE);
     }
 
     @Test
-    public void deleteReturnsNotFoundResponseAndDoesNotDeleteAnyRecordWhenDataDoesNotExist() {
-        when(dashboardService.get(ID)).thenReturn(null);
-        ResponseEntity<DashboardResponse> result = dashboardController.delete(ID);
+    public void deleteSuccessfullyDeletesWhenDashboardExist() {
 
+        ResponseEntity<String> result = dashboardController.delete(ID);
+
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
+        assertEquals(result.getBody(), "Successfully deleted");
+        verify(dashboardService).delete(ID);
+    }
+
+    @Test(expected = DashboardNotFoundException.class)
+    public void deleteReturnsNotFoundResponseAndDoesNotDeleteAnyRecordWhenDataDoesNotExist() {
+        doThrow(new DashboardNotFoundException()).when(dashboardService).delete(ID);
+
+        ResponseEntity<String> result = dashboardController.delete(ID);
         assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
-        assertEquals(Objects.requireNonNull(result.getBody()).getMessage(), "does not exist, can't be deleted");
-        verify(dashboardService, never()).delete(any(Dashboard.class));
     }
 
 }

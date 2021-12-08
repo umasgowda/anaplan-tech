@@ -1,5 +1,7 @@
-package com.anaplan.bringyourowninterview.dashboard;
+package com.anaplan.bringyourowninterview.dashboard.web;
 
+import com.anaplan.bringyourowninterview.dashboard.service.DashboardService;
+import com.anaplan.bringyourowninterview.dashboard.web.model.Dashboard;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -35,9 +37,6 @@ public class DashboardController {
         log.info("Dashboard get {}", id);
 
         Dashboard dashboard = dashboardService.get(id);
-        if (dashboard == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         return new ResponseEntity<>(dashboard, HttpStatus.OK);
     }
 
@@ -61,17 +60,10 @@ public class DashboardController {
 
     @DeleteMapping(value = "/{id}/dashboards")
     @ApiOperation(value = "Deletes Dashboard", response = Dashboard.class)
-    public ResponseEntity<DashboardResponse> delete(@PathVariable(name = "id") Integer id) {
+    public ResponseEntity<String> delete(@PathVariable(name = "id") Integer id) {
         log.info("Dashboard delete id {}", id);
-        Dashboard dashboard = dashboardService.get(id);
-        if (dashboard == null) {
-            DashboardResponse dashboardResponse = DashboardResponse.builder().message("does not exist, can't be deleted").build();
-            return new ResponseEntity<>(dashboardResponse, HttpStatus.NOT_FOUND);
-        } else {
-            dashboardService.delete(dashboard);
-            DashboardResponse dashboardResponse = DashboardResponse.builder().message("Successfully deleted").build();
-            return new ResponseEntity<>(dashboardResponse, HttpStatus.OK);
-        }
+        dashboardService.delete(id);
+        return new ResponseEntity<>("Successfully deleted", HttpStatus.OK);
     }
 
 }

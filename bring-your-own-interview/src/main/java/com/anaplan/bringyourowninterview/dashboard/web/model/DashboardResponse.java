@@ -1,4 +1,4 @@
-package com.anaplan.bringyourowninterview.dashboard;
+package com.anaplan.bringyourowninterview.dashboard.web.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class DashboardResponse {
 
     private String message;
+
 }
